@@ -235,6 +235,7 @@ extern "C"
 
     int     OV5640_EnableDVPMode(OV5640_Object_t *pObj);
     int32_t OV5640_EnableMIPIMode(OV5640_Object_t *pObj);
+    int     OV5640_DisablePADOutput(OV5640_Object_t *pObj);
     int32_t OV5640_SetMIPIVirtualChannel(OV5640_Object_t *pObj, uint32_t vchannel);
     int32_t OV5640_Start(OV5640_Object_t *pObj);
     int32_t OV5640_Stop(OV5640_Object_t *pObj);

@@ -1811,6 +1811,32 @@ int OV5640_EnableDVPMode(OV5640_Object_t *pObj) {
     return ret;
 }
 
+int OV5640_DisablePADOutput(OV5640_Object_t *pObj) {
+    uint32_t              index;
+    int32_t               ret = OV5640_OK;
+    uint8_t               tmp;
+
+
+    static const uint16_t regs[4][2] =
+        {
+            /* Configure the IO Pad, output FREX/VSYNC/HREF/PCLK/D[9:2]/GPIO0/GPIO1 */
+            {OV5640_PAD_OUTPUT_ENABLE01, 0x00},
+            {OV5640_PAD_OUTPUT_ENABLE02, 0x00},
+            {       OV5640_PAD_SELECT01, 0},
+            {       OV5640_PAD_SELECT02, 0},
+    };
+
+    for (index = 0; index < sizeof(regs) / 4U; index++) {
+        tmp = (uint8_t)regs[index][1];
+        if (ov5640_write_reg(&pObj->Ctx, regs[index][0], &tmp, 1) != OV5640_OK) {
+            ret = OV5640_ERROR;
+            break;
+        }
+    }
+
+    return ret;
+}
+
 /**
  * @brief  Enable MIPI (Mobile Industry Processor Interface) Mode: Serial port
  * @param  pObj  pointer to component object
