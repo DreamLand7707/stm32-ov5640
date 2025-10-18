@@ -134,6 +134,15 @@ extern "C"
     #define OV5640_R480x272              0x02U /* 480x272 Resolution         */
     #define OV5640_R640x480              0x03U /* VGA Resolution             */
     #define OV5640_R800x480              0x04U /* WVGA Resolution            */
+    #define OV5640_R800x600              0x05U /* SVGA Resolution            */
+    #define OV5640_R1024x768             0x06U /* XGA Resolution            */
+    #define OV5640_R1280x800             0x07U /* WXGA Resolution            */
+    #define OV5640_R1440x900             0x08U /* WXGA+ Resolution            */
+    #define OV5640_R1280x1024            0x0AU /* SXGA Resolution            */
+    #define OV5640_R1600x1200            0x0BU /* UXGA Resolution            */
+    #define OV5640_R1920x1080            0x0CU /* 1080P Resolution            */
+    #define OV5640_R2048x1536            0x0DU /* QXGA Resolution            */
+    #define OV5640_R2592x1944            0x0EU /* 5M Resolution            */
 
     /* Camera Pixel Format */
     #define OV5640_RGB565                0x00U /* Pixel Format RGB565        */
@@ -240,8 +249,16 @@ extern "C"
     int32_t OV5640_Start(OV5640_Object_t *pObj);
     int32_t OV5640_Stop(OV5640_Object_t *pObj);
 
+    int32_t OV5640_OutSize_Set(OV5640_Object_t *pObj, uint16_t offx, uint16_t offy, uint16_t width, uint16_t height);
+    int32_t OV5640_ImageWin_Set(OV5640_Object_t *pObj, uint16_t offx, uint16_t offy, uint16_t width, uint16_t height);
+    int32_t OV5640_JPEG_Mode(OV5640_Object_t *pObj);
+    int32_t OV5640_RGB565_Mode(OV5640_Object_t *pObj);
+    int32_t OV5640_Init_General_Mode(OV5640_Object_t *pObj, uint32_t Resolution, uint32_t PixelFormat);
+    int32_t OV5640_Set_Solution_More(OV5640_Object_t *pObj, uint32_t solution);
+
     /* CAMERA driver structure */
     extern OV5640_CAMERA_Drv_t OV5640_CAMERA_Driver;
+    extern uint16_t solution_table[][2];
     /**
      * @}
      */
