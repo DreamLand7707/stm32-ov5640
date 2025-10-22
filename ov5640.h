@@ -138,11 +138,11 @@ extern "C"
     #define OV5640_R1024x768             0x06U /* XGA Resolution            */
     #define OV5640_R1280x800             0x07U /* WXGA Resolution            */
     #define OV5640_R1440x900             0x08U /* WXGA+ Resolution            */
-    #define OV5640_R1280x1024            0x0AU /* SXGA Resolution            */
-    #define OV5640_R1600x1200            0x0BU /* UXGA Resolution            */
-    #define OV5640_R1920x1080            0x0CU /* 1080P Resolution            */
-    #define OV5640_R2048x1536            0x0DU /* QXGA Resolution            */
-    #define OV5640_R2592x1944            0x0EU /* 5M Resolution            */
+    #define OV5640_R1280x1024            0x09U /* SXGA Resolution            */
+    #define OV5640_R1600x1200            0x0AU /* UXGA Resolution            */
+    #define OV5640_R1920x1080            0x0BU /* 1080P Resolution            */
+    #define OV5640_R2048x1536            0x0CU /* QXGA Resolution            */
+    #define OV5640_R2592x1944            0x0DU /* 5M Resolution            */
 
     /* Camera Pixel Format */
     #define OV5640_RGB565                0x00U /* Pixel Format RGB565        */
