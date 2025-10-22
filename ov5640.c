@@ -2315,7 +2315,7 @@ uint16_t solution_table[][2] = {
     {1600, 1200}, // UXGA
     {1920, 1080}, // 1080P
     {2048, 1536}, // QXGA
-    {2592, 1944}, // 500W
+    {2100, 1575}, // 500W
 };
 
 int32_t OV5640_OutSize_Set(OV5640_Object_t *pObj, uint16_t offx, uint16_t offy, uint16_t width, uint16_t height) {
