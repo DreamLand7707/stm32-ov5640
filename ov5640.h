@@ -255,10 +255,20 @@ extern "C"
     int32_t OV5640_RGB565_Mode(OV5640_Object_t *pObj);
     int32_t OV5640_Init_General_Mode(OV5640_Object_t *pObj, uint32_t Resolution, uint32_t PixelFormat);
     int32_t OV5640_Set_Solution_More(OV5640_Object_t *pObj, uint32_t solution);
+    int32_t OV5640_Focus_Init(OV5640_Object_t *pObj);
+    int32_t OV5640_Focus_Single(OV5640_Object_t *pObj);
+    int32_t OV5640_Focus_Constant(OV5640_Object_t *pObj);
+
+    int32_t OV5640_Focus_Send_Single(OV5640_Object_t *pObj);
+    uint8_t OV5640_Focus_Read_Single(OV5640_Object_t *pObj);
+
+    int32_t OV5640_Focus_Send_Constant_IDLE(OV5640_Object_t *pObj);
+    int32_t OV5640_Focus_Send_Constant_Focus(OV5640_Object_t *pObj);
+    uint8_t OV5640_Focus_Read_Constant(OV5640_Object_t *pObj);
 
     /* CAMERA driver structure */
     extern OV5640_CAMERA_Drv_t OV5640_CAMERA_Driver;
-    extern uint16_t solution_table[][2];
+    extern uint16_t            solution_table[][2];
     /**
      * @}
      */
