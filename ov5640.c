@@ -1308,7 +1308,7 @@ int32_t OV5640_SetBrightness(OV5640_Object_t *pObj, int32_t Level) {
  */
 int32_t OV5640_SetSaturation(OV5640_Object_t *pObj, int32_t Level) {
     int32_t       ret;
-    const uint8_t saturation_level[] = {0x00U, 0x10U, 0x20U, 0x30U, 0x80U, 0x70U, 0x60U, 0x50U, 0x40U};
+    const uint8_t saturation_level[] = {0x00U, 0x10U, 0x20U, 0x30U, 0x40U, 0x50U, 0x60U, 0x70U, 0x80U};
     uint8_t       tmp;
 
     tmp = 0xFF;
@@ -2885,6 +2885,107 @@ int32_t OV5640_Focus_Send_Constant_Focus(OV5640_Object_t *pObj) {
     ov5640_write_reg(&pObj->Ctx, 0x3022, &temp, 1);
 
     return OV5640_OK;
+}
+
+const static uint8_t OV5640_SATURATION_TBL[7][6] = {
+    {0X0C, 0x30, 0X3D, 0X3E, 0X3D, 0X01}, //-3
+    {0X10, 0x3D, 0X4D, 0X4E, 0X4D, 0X01}, //-2
+    {0X15, 0x52, 0X66, 0X68, 0X66, 0X02}, //-1
+    {0X1A, 0x66, 0X80, 0X82, 0X80, 0X02}, //+0
+    {0X1F, 0x7A, 0X9A, 0X9C, 0X9A, 0X02}, //+1
+    {0X24, 0x8F, 0XB3, 0XB6, 0XB3, 0X03}, //+2
+    {0X2B, 0xAB, 0XD6, 0XDA, 0XD6, 0X04}  //+3
+};
+
+void OV5640_Color_Saturation(OV5640_Object_t *pObj, uint8_t sat) {
+    uint8_t i;
+    uint8_t temp = 0;
+
+    temp         = 0x03;
+    ov5640_write_reg(&pObj->Ctx, 0x3212, &temp, 1);
+    temp = 0x1c;
+    ov5640_write_reg(&pObj->Ctx, 0x5381, &temp, 1);
+    temp = 0x5a;
+    ov5640_write_reg(&pObj->Ctx, 0x5382, &temp, 1);
+    temp = 0x06;
+    ov5640_write_reg(&pObj->Ctx, 0x5383, &temp, 1);
+
+    for (i = 0; i < 6; i++) {
+        temp = OV5640_SATURATION_TBL[sat][i];
+        ov5640_write_reg(&pObj->Ctx, 0x5384, &temp, 1);
+    }
+
+    temp = 0x98;
+    ov5640_write_reg(&pObj->Ctx, 0x538b, &temp, 1);
+    temp = 0x01;
+    ov5640_write_reg(&pObj->Ctx, 0x538a, &temp, 1);
+    temp = 0x13;
+    ov5640_write_reg(&pObj->Ctx, 0x3212, &temp, 1);
+    temp = 0xa3;
+    ov5640_write_reg(&pObj->Ctx, 0x3212, &temp, 1);
+}
+
+void OV5640_Contrast(OV5640_Object_t *pObj, uint8_t contrast) {
+    uint8_t reg0val = 0X00;
+    uint8_t reg1val = 0X20;
+    uint8_t temp    = 0;
+    switch (contrast) {
+    case 0: //-3
+        reg1val = reg0val = 0X14;
+        break;
+    case 1: //-2
+        reg1val = reg0val = 0X18;
+        break;
+    case 2: //-1
+        reg1val = reg0val = 0X1C;
+        break;
+    case 4: // 1
+        reg0val = 0X10;
+        reg1val = 0X24;
+        break;
+    case 5: // 2
+        reg0val = 0X18;
+        reg1val = 0X28;
+        break;
+    case 6: // 3
+        reg0val = 0X1C;
+        reg1val = 0X2C;
+        break;
+    }
+
+    temp = 0x03;
+    ov5640_write_reg(&pObj->Ctx, 0x3212, &temp, 1);
+    temp = reg0val;
+    ov5640_write_reg(&pObj->Ctx, 0x5585, &temp, 1);
+    temp = reg1val;
+    ov5640_write_reg(&pObj->Ctx, 0x5586, &temp, 1);
+    temp = 0x13;
+    ov5640_write_reg(&pObj->Ctx, 0x3212, &temp, 1);
+    temp = 0xa3;
+    ov5640_write_reg(&pObj->Ctx, 0x3212, &temp, 1);
+}
+
+void OV5640_Sharpness(OV5640_Object_t *pObj, uint8_t sharp) {
+    uint8_t temp = 0;
+#define wr_reg(x, y) \
+    temp = (y);      \
+    ov5640_write_reg(&pObj->Ctx, (x), &temp, 1)
+
+    if (sharp < 33) {
+        wr_reg(0x5308, 0x65);
+        wr_reg(0x5302, sharp);
+    }
+    else {
+        wr_reg(0x5308, 0x25);
+        wr_reg(0x5300, 0x08);
+        wr_reg(0x5301, 0x30);
+        wr_reg(0x5302, 0x10);
+        wr_reg(0x5303, 0x00);
+        wr_reg(0x5309, 0x08);
+        wr_reg(0x530a, 0x30);
+        wr_reg(0x530b, 0x04);
+        wr_reg(0x530c, 0x06);
+    }
 }
 /**
  * @}
