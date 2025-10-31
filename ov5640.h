@@ -270,9 +270,11 @@ extern "C"
     int32_t OV5640_Focus_Send_Constant_Focus(OV5640_Object_t *pObj);
     uint8_t OV5640_Focus_Read_Constant(OV5640_Object_t *pObj);
 
-    void OV5640_Color_Saturation(OV5640_Object_t *pObj, uint8_t sat);
-    void OV5640_Contrast(OV5640_Object_t *pObj, uint8_t contrast);
-    void OV5640_Sharpness(OV5640_Object_t *pObj, uint8_t sharp);
+    void    OV5640_Color_Saturation(OV5640_Object_t *pObj, uint8_t sat);
+    void    OV5640_Contrast(OV5640_Object_t *pObj, uint8_t contrast);
+    void    OV5640_Sharpness(OV5640_Object_t *pObj, uint8_t sharp);
+    void    OV5640_StartGroup(OV5640_Object_t *pObj);
+    void    OV5640_UseGroup(OV5640_Object_t *pObj);
 
     /* CAMERA driver structure */
     extern OV5640_CAMERA_Drv_t OV5640_CAMERA_Driver;

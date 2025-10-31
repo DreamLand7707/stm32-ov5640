@@ -2998,6 +2998,21 @@ void OV5640_Sharpness(OV5640_Object_t *pObj, uint8_t sharp) {
         wr_reg(0x530c, 0x06);
     }
 }
+
+void OV5640_StartGroup(OV5640_Object_t *pObj) {
+    uint8_t temp    = 0;
+    temp = 0x03;
+    ov5640_write_reg(&pObj->Ctx, 0x3212, &temp, 1);
+}
+
+void OV5640_UseGroup(OV5640_Object_t *pObj) {
+    uint8_t temp    = 0;
+    temp = 0x13;
+    ov5640_write_reg(&pObj->Ctx, 0x3212, &temp, 1);
+    temp = 0xa3;
+    ov5640_write_reg(&pObj->Ctx, 0x3212, &temp, 1);
+}
+
 /**
  * @}
  */
