@@ -107,6 +107,12 @@ int32_t OV5640_RegisterBusIO(OV5640_Object_t *pObj, OV5640_IO_t *pIO) {
         pObj->Ctx.WriteReg = OV5640_WriteRegWrap;
         pObj->Ctx.handle   = pObj;
 
+        pObj->bright       = 0x01;
+        pObj->saturation   = 0x41;
+        pObj->contrast     = 0x41;
+        pObj->huedegree    = 0x32;
+
+
         if (pObj->IO.Init != NULL) {
             ret = pObj->IO.Init();
         }
@@ -1115,7 +1121,7 @@ int32_t OV5640_SetColorEffect(OV5640_Object_t *pObj, uint32_t Effect) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_ISP_CONTROL01, &tmp, 1);
 
         if (ret == OV5640_OK) {
-            tmp = 0x18;
+            tmp = 0x18 | 0x07;
             ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
         }
         if (ret == OV5640_OK) {
@@ -1137,7 +1143,7 @@ int32_t OV5640_SetColorEffect(OV5640_Object_t *pObj, uint32_t Effect) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_ISP_CONTROL01, &tmp, 1);
 
         if (ret == OV5640_OK) {
-            tmp = 0x18;
+            tmp = 0x18 | 0x07;
             ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
         }
         if (ret == OV5640_OK) {
@@ -1181,7 +1187,7 @@ int32_t OV5640_SetColorEffect(OV5640_Object_t *pObj, uint32_t Effect) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_ISP_CONTROL01, &tmp, 1);
 
         if (ret == OV5640_OK) {
-            tmp = 0x18;
+            tmp = 0x18 | 0x07;
             ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
         }
         if (ret == OV5640_OK) {
@@ -1203,7 +1209,7 @@ int32_t OV5640_SetColorEffect(OV5640_Object_t *pObj, uint32_t Effect) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_ISP_CONTROL01, &tmp, 1);
 
         if (ret == OV5640_OK) {
-            tmp = 0x18;
+            tmp = 0x18 | 0x07;
             ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
         }
         if (ret == OV5640_OK) {
@@ -1225,7 +1231,7 @@ int32_t OV5640_SetColorEffect(OV5640_Object_t *pObj, uint32_t Effect) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_ISP_CONTROL01, &tmp, 1);
 
         if (ret == OV5640_OK) {
-            tmp = 0x40;
+            tmp = 0x47;
             ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
         }
         if (ret != OV5640_OK) {
@@ -1239,7 +1245,7 @@ int32_t OV5640_SetColorEffect(OV5640_Object_t *pObj, uint32_t Effect) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_ISP_CONTROL01, &tmp, 1);
 
         if (ret == OV5640_OK) {
-            tmp = 0x00;
+            tmp = 0x07;
             ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
         }
 
@@ -1275,19 +1281,21 @@ int32_t OV5640_SetBrightness(OV5640_Object_t *pObj, int32_t Level) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL7, &tmp, 1);
     }
     if (ret == OV5640_OK) {
-        tmp = 0x04;
+        tmp = 0x07;
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
     }
 
     if (ret == OV5640_OK) {
         if (Level < 0) {
-            tmp = 0x01;
+            pObj->bright = 0x01;
+            tmp          = pObj->contrast | pObj->bright | pObj->huedegree | pObj->saturation;
             if (ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL8, &tmp, 1) != OV5640_OK) {
                 ret = OV5640_ERROR;
             }
         }
         else {
-            tmp = 0x09;
+            pObj->bright = 0x09;
+            tmp          = pObj->contrast | pObj->bright | pObj->huedegree | pObj->saturation;
             if (ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL8, &tmp, 1) != OV5640_OK) {
                 ret = OV5640_ERROR;
             }
@@ -1322,13 +1330,14 @@ int32_t OV5640_SetSaturation(OV5640_Object_t *pObj, int32_t Level) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL4, &tmp, 1);
     }
     if (ret == OV5640_OK) {
-        tmp = 0x02;
+        tmp = 0x07;
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
     }
 
     if (ret == OV5640_OK) {
-        tmp = 0x41;
-        ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL8, &tmp, 1);
+        pObj->saturation = 0x41;
+        tmp              = pObj->contrast | pObj->bright | pObj->huedegree | pObj->saturation;
+        ret              = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL8, &tmp, 1);
     }
 
     if (ret != OV5640_OK) {
@@ -1355,7 +1364,7 @@ int32_t OV5640_SetContrast(OV5640_Object_t *pObj, int32_t Level) {
     ret = ov5640_write_reg(&pObj->Ctx, OV5640_ISP_CONTROL01, &tmp, 1);
 
     if (ret == OV5640_OK) {
-        tmp = 0x04;
+        tmp = 0x07;
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
     }
     if (ret == OV5640_OK) {
@@ -1366,8 +1375,9 @@ int32_t OV5640_SetContrast(OV5640_Object_t *pObj, int32_t Level) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL5, &tmp, 1);
     }
     if (ret == OV5640_OK) {
-        tmp = 0x41;
-        ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL8, &tmp, 1);
+        pObj->contrast = 0x41;
+        tmp            = pObj->contrast | pObj->bright | pObj->huedegree | pObj->saturation;
+        ret            = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL8, &tmp, 1);
     }
 
     if (ret != OV5640_OK) {
@@ -1397,7 +1407,7 @@ int32_t OV5640_SetHueDegree(OV5640_Object_t *pObj, int32_t Degree) {
     ret = ov5640_write_reg(&pObj->Ctx, OV5640_ISP_CONTROL01, &tmp, 1);
 
     if (ret == OV5640_OK) {
-        tmp = 0x01;
+        tmp = 0x07;
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL0, &tmp, 1);
     }
     if (ret == OV5640_OK) {
@@ -1409,8 +1419,9 @@ int32_t OV5640_SetHueDegree(OV5640_Object_t *pObj, int32_t Degree) {
         ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL2, &tmp, 1);
     }
     if (ret == OV5640_OK) {
-        tmp = hue_degree_ctrl8[Degree + 6];
-        ret = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL8, &tmp, 1);
+        pObj->huedegree = hue_degree_ctrl8[Degree + 6];
+        tmp             = pObj->contrast | pObj->bright | pObj->huedegree | pObj->saturation;
+        ret             = ov5640_write_reg(&pObj->Ctx, OV5640_SDE_CTRL8, &tmp, 1);
     }
 
     if (ret != OV5640_OK) {

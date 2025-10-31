@@ -71,6 +71,10 @@ extern "C"
         uint8_t      IsInitialized;
         uint8_t      Mode;
         uint32_t     VirtualChannelID;
+        uint32_t     saturation;
+        uint32_t     contrast;
+        uint32_t     bright;
+        uint32_t     huedegree;
     } OV5640_Object_t;
 
     typedef struct
